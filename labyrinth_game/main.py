@@ -2,7 +2,7 @@
 
 from .constants import ROOMS
 from .utils import describe_current_room
-from .player_actions import get_input, move_player, take_item   
+from .player_actions import get_input, move_player, take_item, use_item
 
 def process_command(game_state, command):
     parts = command.lower().split()
@@ -12,7 +12,7 @@ def process_command(game_state, command):
     argument = parts[1] if len(parts) > 1 else None
 
     match action:
-        case 'quit':
+        case 'quit' | 'exit':
             print("\nСпасибо за игру! До свидания!")
             return False
         case 'look':
@@ -42,6 +42,11 @@ def process_command(game_state, command):
                 take_item(game_state, argument)
             else:
                 print("\nУкажите предмет: take")
+        case 'use':
+            if argument:
+                use_item(game_state, argument)
+            else:
+                print("\nВы не можете использовать предмет.")
     return True
         
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from .constants import ROOMS
-from .utils import describe_current_room
+from .utils import describe_current_room, solve_puzzle
 from .player_actions import get_input, move_player, take_item, use_item
 
 def process_command(game_state, command):
@@ -47,6 +47,8 @@ def process_command(game_state, command):
                 use_item(game_state, argument)
             else:
                 print("\nВы не можете использовать предмет.")
+        case 'solve':
+                solve_puzzle(game_state)
     return True
         
 

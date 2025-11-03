@@ -43,10 +43,10 @@ def use_item(game_state, item_name):
             case 'sword':
                 print("Вы достали меч, уверенность растет.")
             case 'bronze_box':
-                print("Вы открыли шкатулку. Внутри лежит ржавый ключ")
+                print("\nВы открыли шкатулку. Внутри лежит ржавый ключ")
                 if 'rusty_key' not in game_state['player_inventory']:
                     game_state['player_inventory'].append('rusty_key')
-                    print("Вы взяли ржавый ключ.")
+                    print("\nВы взяли ржавый ключ. Он может использоваться для открытия сундука")
                 else:
                     print("Но у вас уже есть такой ключ.")
             case _:

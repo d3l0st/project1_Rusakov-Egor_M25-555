@@ -2,6 +2,7 @@
 
 from .constants import ROOMS
 from .utils import describe_current_room
+from .player_actions import get_input
 
 def main():
     game_state = {

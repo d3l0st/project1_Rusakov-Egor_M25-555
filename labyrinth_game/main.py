@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from .constants import ROOMS
-from .utils import describe_current_room, solve_puzzle, attempt_open_treasure
+from .utils import describe_current_room, solve_puzzle, attempt_open_treasure, show_help
 from .player_actions import get_input, move_player, take_item, use_item
 
 def process_command(game_state, command):
@@ -52,6 +52,8 @@ def process_command(game_state, command):
                     attempt_open_treasure(game_state)
                 else:
                     solve_puzzle(game_state)
+        case 'help':
+            show_help()
     return True
         
 

@@ -18,8 +18,8 @@ def process_command(game_state, command):
         case 'look':
             describe_current_room(game_state)
         case 'inventory':
-            if game_state['inventory']:
-                print(f"\nВаш инвентарь: {', '.join(game_state['inventory'])}")
+            if game_state['player_inventory']:
+                print(f"\nВаш инвентарь: {', '.join(game_state['player_inventory'])}")
             else:
                 print("\nВаш инвентарь пуст")
         case 'go':

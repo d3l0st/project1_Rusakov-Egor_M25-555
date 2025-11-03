@@ -1,4 +1,5 @@
 # labyrinth_game/players_actions.py
+from .constants import ROOMS
 
 def show_inventory(game_state):
     if game_state['player_inventory']:
@@ -12,3 +13,24 @@ def get_input(prompt="> "):
     except (KeyboardInterrupt, EOFError):
         print("\nВыход из игры.")
         return "quit"
+    
+def move_player(game_state, direction):
+    current_room = game_state['current_room']
+    room_data = ROOMS[current_room]
+    if direction in room_data['exits']:
+        new_room = room_data['exits'][direction]
+        game_state['current_room'] = new_room
+        print(f"Вы переместились в направлении {direction} в {new_room}.")
+    else:
+        print("Нельзя пойти в этом направлении.")
+        return False
+
+def take_item(game_state, item_name):
+    current_room = game_state['current_room']
+    room_data = ROOMS[current_room]
+    if item_name in room_data['items']:
+        game_state['player_inventory'].append(item_name)
+        room_data['items'].remove(item_name)
+        print(f"Вы подняли: {item_name}.")
+    else:
+        print("Такого предмета здесь нет.")

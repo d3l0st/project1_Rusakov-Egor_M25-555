@@ -1,9 +1,18 @@
 # labyrinth_game/utils.py
-from .constants import ROOMS, COMMANDS
-from .player_actions import get_input
 import math
 
+from .constants import COMMANDS, ROOMS
+from .player_actions import get_input
+
+
 def describe_current_room(game_state):
+    """Выводит подробное описание текущей комнаты.
+    
+    Args:
+        game_state (dict): Текущее состояние игры,
+        включающее в себя название текущей комнаты
+
+    """
     current_room_name = game_state['current_room']
     room = ROOMS[current_room_name]
 
@@ -27,6 +36,14 @@ def describe_current_room(game_state):
         print("\nКажется, здесь есть загадка (используйте команду solve).")
 
 def solve_puzzle(game_state):
+    """Позволяет игроку решить загадку в текущей комнате.
+    
+    Args:
+        game_state (dict): Текущее состояние игры
+        
+    Returns:
+        bool: True если загадка решена успешно, False если нет
+    """
     current_room_name = game_state['current_room']
     room = ROOMS[current_room_name]
     if room['puzzle']:
@@ -49,6 +66,15 @@ def solve_puzzle(game_state):
         print("Загадок здесь нет.")
 
 def check_answer(user_answer, correct_answer):
+    """Проверяет ответ пользователя с учетом альтернативных вариантов.
+    
+    Args:
+        user_answer (str): Ответ введенный пользователем
+        correct_answer (str): Правильный ответ
+        
+    Returns:
+        bool: True если ответ верный, False если нет
+    """
     user_answer = user_answer.lower().strip()
     correct_answer = correct_answer.lower().strip()
 
@@ -81,6 +107,14 @@ def get_room_reward(current_room_name):
     return rewards.get(current_room_name, 'mysterious_item')
     
 def attempt_open_treasure(game_state):
+    """Попытка открыть сундук с сокровищами в treasure_room.
+    
+    Args:
+        game_state (dict): Текущее состояние игры
+        
+    Returns:
+        bool: True если игра завершена победой, False если нет
+    """
     current_room_name = game_state['current_room']
     room = ROOMS[current_room_name]
     if current_room_name != 'treasure_room':
@@ -111,6 +145,15 @@ def attempt_open_treasure(game_state):
                     print("Вы отступаете от сундука.")
 
 def pseudo_random(seed, modulo):
+    """Генерирует псевдослучайное число на основе синуса.
+    
+    Args:
+        seed (int): Число для инициализации генератора
+        modulo (int): Верхняя граница диапазона [0, modulo)
+        
+    Returns:
+        int: Псевдослучайное число в диапазоне [0, modulo)
+    """
     sin_value = math.sin(seed * 12.9898)
     multiplied = sin_value * 43758.5453
     fractional_part = multiplied - math.floor(multiplied)
@@ -118,6 +161,14 @@ def pseudo_random(seed, modulo):
     return result
 
 def trigger_trap(game_state):
+    """Активирует ловушку с негативными последствиями для игрока.
+    
+    Args:
+        game_state (dict): Текущее состояние игры
+        
+    Returns:
+        bool: True если игрок выжил, False если игра завершена
+    """
     print("/nЛовушка активирована! Пол стал дрожать...")
     if game_state['player_inventroy']:
         items_count = len(game_state['player_inventory'])
@@ -131,9 +182,14 @@ def trigger_trap(game_state):
             print("Игра окончена. Вы проиграли!")
             game_state['game_over'] = True
         else:
-            print("Вам удалось увернуться от ловушки! Вы уцелели, но будьте осторожнее.")
+            print("Вам удалось увернуться от ловушки! Вы уцелели, но будьте осторожнее.") # noqa: E501
 
 def random_event(game_state):
+    """Создает случайные события во время перемещения игрока.
+    
+    Args:
+        game_state (dict): Текущее состояние игры
+    """
     event_chance = pseudo_random(999, 10) 
     if event_chance != 0:
         return
@@ -161,13 +217,14 @@ def random_event(game_state):
         case 2:
             # Сценарий 3: Срабатывание ловушки
             print("\nВы чувствуете, что наступили на что-то подозрительное...")
-            if current_room_name == 'trap_room' and 'torch' not in game_state['player_inventory']:
+            if current_room_name == 'trap_room' and 'torch' not in game_state['player_inventory']: # noqa: E501
                 print("Это была ловушка! В темноте вы не разглядели ее!")
                 trigger_trap(game_state)
             else:
                 print("К счастью, это оказался просто камень.")   
 
 def show_help():
+    """Выводит справку по доступным командам игры."""
     print("\nДоступные команды:")
     for comand, description in COMMANDS.items():
         formatted_command = f"{comand:<16}"

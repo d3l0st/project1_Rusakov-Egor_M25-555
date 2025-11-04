@@ -1,10 +1,20 @@
 #!/usr/bin/env python3
 
-from .constants import ROOMS
-from .utils import describe_current_room, solve_puzzle, attempt_open_treasure, show_help
 from .player_actions import get_input, move_player, take_item, use_item
+from .utils import attempt_open_treasure, describe_current_room, show_help, solve_puzzle
+
 
 def process_command(game_state, command):
+    """Обрабатывает команду пользователя и выполняет соответствующие действия.
+    
+    Args:
+        game_state (dict): Текущее состояние игры
+        command (str): Введенная пользователем команда
+        
+    Returns:
+        bool: True если игра должна продолжиться, False если завершена
+
+    """
     parts = command.lower().split()
     if not parts:
         return True
@@ -19,7 +29,7 @@ def process_command(game_state, command):
             describe_current_room(game_state)
         case 'inventory':
             if game_state['player_inventory']:
-                print(f"\nВаш инвентарь: {', '.join(game_state['player_inventory'])}")
+                print(f"\nВаш инвентарь: {', '.join(game_state['player_inventory'])}") # noqa: E501
             else:
                 print("\nВаш инвентарь пуст")
         case 'go':
@@ -58,11 +68,12 @@ def process_command(game_state, command):
             move_player(game_state, action)
             describe_current_room(game_state)
         case _:
-            print(f"Неизвестная команда: '{command}'. Введите 'help' для списка команд.")
+            print(f"Неизвестная команда: '{command}'. Введите 'help' для списка команд.") # noqa: E501
     return True
         
 
 def main():
+    """Основная функция игры, запускающая игровой цикл."""
     game_state = {
     'player_inventory': [], # Инвентарь игрока
     'current_room': 'entrance', # Текущая комната

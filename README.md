@@ -29,6 +29,7 @@ poetry install
 # Или используйте Makefile
 make install
 ```
+
 ### Запуск
 ```bash
 # Запуск используя poetry
@@ -38,6 +39,14 @@ poetry run project
 make project
 ```
 
+### Проверка с помощью ruff
+```bash
+# Запуск используя poetry
+poetry run ruff check .
+
+# Или используйте Makefile
+make init
+```
 
 ### Демонстрация игрового процесса
 https://asciinema.org/a/5KvKKtNPCtZZ85nDBLJvDk4Xe

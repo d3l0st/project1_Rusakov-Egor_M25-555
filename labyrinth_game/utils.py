@@ -102,13 +102,13 @@ def random_event(game_state):
         return
     event_type = pseudo_random(888, 3)
     current_room_name = game_state['current_room']
-    room = ROOMS[current_room]     
+    room = ROOMS[current_room_name]     
     match event_type:
         case 0:
             # Сценарий 1: Находка
             print("\nВы заметили что-то блестящее на полу...")
-            if 'coin' not in room_data['items']:
-                room_data['items'].append('coin')
+            if 'coin' not in room['items']:
+                room['items'].append('coin')
                 print("Вы нашли монетку! Она добавлена в комнату.")
             else:
                 print("Это была всего лишь пыль...")
@@ -124,7 +124,7 @@ def random_event(game_state):
         case 2:
             # Сценарий 3: Срабатывание ловушки
             print("\nВы чувствуете, что наступили на что-то подозрительное...")
-            if current_room == 'trap_room' and 'torch' not in game_state['player_inventory']:
+            if current_room_name == 'trap_room' and 'torch' not in game_state['player_inventory']:
                 print("Это была ловушка! В темноте вы не разглядели ее!")
                 trigger_trap(game_state)
             else:

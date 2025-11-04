@@ -31,5 +31,15 @@ poetry install
 # Или используйте Makefile
 make install
 ```
+### Запуск
+```bash
+# Запуск используя poetry
+poetry run project
+
+# Или используйте Makefile
+make project
+```
+
+
 ### Демонстрация игрового процесса
 https://asciinema.org/a/5KvKKtNPCtZZ85nDBLJvDk4Xe

@@ -98,6 +98,7 @@ def attempt_open_treasure(game_state):
             match user_answer:
                 case 'да':
                     question, correct_code = room['puzzle']
+                    print(question)
                     user_code = get_input("Введите код: ").strip()
                     if user_code == correct_code:
                         print("Код верный! Замок открывается.")

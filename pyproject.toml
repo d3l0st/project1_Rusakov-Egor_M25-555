@@ -17,13 +17,15 @@ ignore = []
 [tool.poetry]
 name = "labyrinth_game"
 version = "0.1.0"
-description = ""
+description = "Adventrure labyrinth game"
 authors = ["Egor Rusakov"]
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
 
 [tool.poetry.dev-dependencies]
+ruff = "^0.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

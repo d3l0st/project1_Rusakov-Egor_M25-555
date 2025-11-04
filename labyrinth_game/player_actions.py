@@ -1,5 +1,6 @@
 # labyrinth_game/players_actions.py
 from .constants import ROOMS
+from utils import random_event
 
 def show_inventory(game_state):
     if game_state['player_inventory']:
@@ -21,6 +22,7 @@ def move_player(game_state, direction):
         new_room = room_data['exits'][direction]
         game_state['current_room'] = new_room
         print(f"Вы переместились в направлении {direction} в {new_room}.")
+        random_event(game_state)
     else:
         print("Нельзя пойти в этом направлении.")
         return False

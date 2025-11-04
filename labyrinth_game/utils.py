@@ -1,6 +1,7 @@
 # labyrinth_game/utils.py
 from .constants import ROOMS
 from .player_actions import get_input
+import math
 
 def describe_current_room(game_state):
     current_room_name = game_state['current_room']
@@ -71,6 +72,63 @@ def attempt_open_treasure(game_state):
                         print("Неверный код. Замок не открылся.")               
                 case 'нет':
                     print("Вы отступаете от сундука.")
+
+def pseudo_random(seed, modulo):
+    sin_value = math.sin(seed * 12.9898)
+    multiplied = sin_value * 43758.5453
+    fractional_part = multiplied - math.floor(multiplied)
+    result = math.floor(fractional_part * modulo)
+    return result
+
+def trigger_trap(game_state):
+    print("/nЛовушка активирована! Пол стал дрожать...")
+    if game_state['player_inventroy']:
+        items_count = len(game_state['player_inventory'])
+        lost_item_index = pseudo_random(game_state.get('steps_taken', 0), items_count)
+        lost_item = game_state['player_inventory'].pop(lost_item_index)
+        print(f"В результате действия ловушки вы теряете {lost_item}")
+    else:
+        damage_chance = pseudo_random(20, 10)
+        if damage_chance < 3: 
+            print("Вы не успели увернуться! Ловушка наносит смертельный удар...")
+            print("Игра окончена. Вы проиграли!")
+            game_state['game_over'] = True
+        else:
+            print("Вам удалось увернуться от ловушки! Вы уцелели, но будьте осторожнее.")
+
+def random_event(game_state):
+    event_chance = pseudo_random(999, 10) 
+    if event_chance != 0:
+        return
+    event_type = pseudo_random(888, 3)
+    current_room_name = game_state['current_room']
+    room = ROOMS[current_room]     
+    match event_type:
+        case 0:
+            # Сценарий 1: Находка
+            print("\nВы заметили что-то блестящее на полу...")
+            if 'coin' not in room_data['items']:
+                room_data['items'].append('coin')
+                print("Вы нашли монетку! Она добавлена в комнату.")
+            else:
+                print("Это была всего лишь пыль...")
+                
+        case 1:
+            # Сценарий 2: Испуг
+            print("\nВы слышите странный шорох из темноты...")
+            if 'sword' in game_state['player_inventory']:
+                print("Вы достаете меч, и шорох мгновенно прекращается!")
+            else:
+                print("Шорох становится громче... Вам становится не по себе.")
+                
+        case 2:
+            # Сценарий 3: Срабатывание ловушки
+            print("\nВы чувствуете, что наступили на что-то подозрительное...")
+            if current_room == 'trap_room' and 'torch' not in game_state['player_inventory']:
+                print("Это была ловушка! В темноте вы не разглядели ее!")
+                trigger_trap(game_state)
+            else:
+                print("К счастью, это оказался просто камень.")   
 
 def show_help():
     print("\nДоступные команды:")

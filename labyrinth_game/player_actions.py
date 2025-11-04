@@ -19,10 +19,13 @@ def move_player(game_state, direction):
     room_data = ROOMS[current_room]
     if direction in room_data['exits']:
         new_room = room_data['exits'][direction]
+        if new_room == 'treasure_room' and 'rusty_key' not in game_state['player_inventory']:
+            print("Дверь заперта. Нужен ключ, чтобы пройти дальше.")
+            return False
         game_state['current_room'] = new_room    
         print(f"Вы переместились в направлении {direction} в {new_room}.")
-        #if new_room == 'treasure_room':
-        #    if 'rusty_key' in game_state['player_inventory']
+        if new_room == 'treasure_room' and 'rusty_key' in game_state['player_inventory']:
+            print("Вы используете найденный ключ, чтобы открыть путь в комнату сокровищ.")
         from .utils import random_event
         random_event(game_state)
     else:

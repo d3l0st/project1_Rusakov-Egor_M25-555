@@ -54,6 +54,11 @@ def process_command(game_state, command):
                     solve_puzzle(game_state)
         case 'help':
             show_help()
+        case 'north' | 'south' | 'west' | 'east':
+            move_player(game_state, action)
+            describe_current_room(game_state)
+        case _:
+            print(f"Неизвестная команда: '{command}'. Введите 'help' для списка команд.")
     return True
         
 

@@ -1,5 +1,5 @@
 # labyrinth_game/utils.py
-from .constants import ROOMS
+from .constants import ROOMS, COMMANDS
 from .player_actions import get_input
 import math
 
@@ -33,16 +33,52 @@ def solve_puzzle(game_state):
         question, answer = room['puzzle']
         print(question)
         user_answer = get_input("Ваш ответ: ").strip()
-        if user_answer.lower().strip() == answer.lower().strip():
+        is_correct = check_answer(user_answer, answer)
+        if is_correct:
             print("\nПравильно! Загадка решена!")
             room['puzzle'] = None
-            reward = 'magic_glove'
+            reward = get_room_reward(current_room_name)
             game_state['player_inventory'].append(reward)
             print(f"\nВы получаете награду {reward}!")
         else:
             print("\nНеверно. Попробуйте снова.")
+            if current_room_name == 'trap_room':
+                print("Неверный ответ активирует ловушку!")
+                trigger_trap(game_state)
     else: 
         print("Загадок здесь нет.")
+
+def check_answer(user_answer, correct_answer):
+    user_answer = user_answer.lower().strip()
+    correct_answer = correct_answer.lower().strip()
+
+    if user_answer == correct_answer:
+        return True
+
+    number_alternatives = {
+        '10': ['десять', 'ten'],
+        '8': ['восемь', 'eight'],
+        '6': ['шесть', 'six'],
+        '5': ['пять', 'five'],
+        '3': ['три', 'three']
+    }
+    
+    if correct_answer in number_alternatives:
+        if user_answer in number_alternatives[correct_answer]:
+            return True
+    
+    return False
+
+def get_room_reward(current_room_name):
+    rewards = {
+        'hall': 'silver_key',
+        'trap_room': 'axe',
+        'library': 'ancient_scroll',
+        'garden': 'healing_potion',
+        'observatory': 'star_compass',
+        'armory': 'steel_gauntlets'
+    }
+    return rewards.get(current_room_name, 'mysterious_item')
     
 def attempt_open_treasure(game_state):
     current_room_name = game_state['current_room']
@@ -132,11 +168,6 @@ def random_event(game_state):
 
 def show_help():
     print("\nДоступные команды:")
-    print("  go <direction>  - перейти в направлении (north/south/east/west)")
-    print("  look            - осмотреть текущую комнату")
-    print("  take <item>     - поднять предмет")
-    print("  use <item>      - использовать предмет из инвентаря")
-    print("  inventory       - показать инвентарь")
-    print("  solve           - попытаться решить загадку в комнате")
-    print("  quit            - выйти из игры")
-    print("  help            - показать это сообщение")
+    for comand, description in COMMANDS.items():
+        formatted_command = f"{comand:<16}"
+        print(f"{formatted_command} - {description}")
